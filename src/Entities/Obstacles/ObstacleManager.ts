@@ -3,11 +3,11 @@
  * obstacles, places new obstacles as the skier moves throughout the world and displays them all to the screen.
  */
 
-import { GAME_WIDTH, GAME_HEIGHT } from "../../Constants";
+import { GAME_WIDTH, GAME_HEIGHT, IMAGE_NAMES } from "../../Constants";
 import { Canvas } from "../../Core/Canvas";
 import { ImageManager } from "../../Core/ImageManager";
 import { Position, randomInt, Rect } from "../../Core/Utils";
-import { Obstacle } from "./Obstacle";
+import { Obstacle, OBSTACLE_TYPES, OBSTACLE_TYPES_DIR } from "./Obstacle";
 
 /**
  * Ensures that obstacles aren't too close together
@@ -29,6 +29,11 @@ const STARTING_OBSTACLE_REDUCER: number = 300;
  * The chance that a new obstacle will be placed as the skier is moving. A lower number increases the chances.
  */
 const NEW_OBSTACLE_CHANCE: number = 8;
+
+/**
+ * The chance that a new obstacle will be a jump ramp. A lower number increases the chances.
+ */
+const JUMP_RAMP_CHANCE: number = 10;
 
 export class ObstacleManager {
     /**
@@ -65,6 +70,20 @@ export class ObstacleManager {
         this.obstacles.forEach((obstacle: Obstacle) => {
             obstacle.draw();
         });
+    }
+
+    /**
+     * Get a random obstacle type, with a chance to spawn a jump ramp
+     */
+    getRandomObstacleType(): IMAGE_NAMES {
+        // chance to spawn a jump ramp based on the chance variable
+        const rampChance = randomInt(1, JUMP_RAMP_CHANCE);
+        if (rampChance === JUMP_RAMP_CHANCE) {
+            return OBSTACLE_TYPES_DIR.jumpRamp;
+        }
+        // otherwise, spawn a random obstacle
+        const typeIdx = randomInt(0, OBSTACLE_TYPES.length - 1);
+        return OBSTACLE_TYPES[typeIdx];
     }
 
     /**

@@ -13,7 +13,7 @@ import { intersectTwoRects, getDirectionVector } from "../Core/Utils";
 /**
  * The rhino starts running at this speed. Saved in case speed needs to be reset at any point.
  */
-const STARTING_SPEED: number = 10.5;
+const STARTING_SPEED: number = 7.5;
 
 /**
  * The different states the rhino can be in.
@@ -53,26 +53,6 @@ export class Rhino extends Entity {
     speed: number = STARTING_SPEED;
 
     /**
-     * Stores all of the animations available for the different states of the rhino.
-     */
-    animations: { [key: string]: Animation } = {};
-
-    /**
-     * The animation that the rhino is currently using. Typically matches the state the rhino is in.
-     */
-    curAnimation: Animation | null = null;
-
-    /**
-     * The current frame of the current animation the rhino is on.
-     */
-    curAnimationFrame: number = 0;
-
-    /**
-     * The time in ms of the last frame change. Used to provide a consistent framerate.
-     */
-    curAnimationFrameTime: number = Date.now();
-
-    /**
      * Initialize the rhino, get the animations setup and set the starting animation which will be based upon the
      * starting state.
      */
@@ -87,10 +67,15 @@ export class Rhino extends Entity {
      */
     setupAnimations() {
         this.animations[STATES.STATE_RUNNING] = new Animation(IMAGES_RUNNING, true);
-
         this.animations[STATES.STATE_EATING] = new Animation(IMAGES_EATING, false, this.celebrate.bind(this));
-
         this.animations[STATES.STATE_CELEBRATING] = new Animation(IMAGES_CELEBRATING, true);
+    }
+
+    /**
+     * Get the current state of the rhino.
+     */
+    protected getState(): string {
+        return this.state;
     }
 
     /**
