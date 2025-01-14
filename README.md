@@ -50,9 +50,9 @@ The application will be available at `http://localhost:8080`
 
 -   Encountered a bug (or feature) that pressing pause and unpause speeds up the game significantly. Prevented this by canceling the previous animation frames on each pause
 
--   Fixed the canvas not resizing with the window by adding a setupResizeHandling method to `Game` class with a window listener that sets teh canvas width & height on fire
+-   Fixed the canvas not resizing with the window by adding a setupResizeHandling method to `Game` class with a window listener that sets the canvas width & height on fire
 
--   Added unit tests for Obstacles in `src/Entities/Obstacles/__test__` that test the basic generation of new obsticals, their movement and expected thrown errors
+-   Added unit tests for Obstacles in `src/Entities/Obstacles/__test__` that test the basic generation of new obstacles, their movement and expected thrown errors
 
 -   Dockerized the application for running in prod
 
