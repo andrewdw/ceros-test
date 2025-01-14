@@ -1,5 +1,9 @@
 # Ceros Ski Code Challenge - TypeScript Edition
 
+![demo](./demo.gif)
+
+<!-- ## Live Demo here: https://ceros-ski.herokuapp.com/ -->
+
 ## Running the Application
 
 ### Requirements
@@ -9,9 +13,9 @@
 
 ### Running locally with Docker (recommended)
 
-`make dev` or `docker compose up` will run the application in production mode
+`make dev` or `docker compose up` will run the application
 
-### Running locally without Docker in dev mode
+### Running locally without Docker
 
 1. `npm install`
 2. `npm run dev`

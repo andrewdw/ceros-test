@@ -1,7 +1,7 @@
 FROM node:20-alpine AS builder
 
 # Set environment variables
-ENV NODE_ENV=production
+ENV NODE_ENV=development
 ENV PUPPETEER_SKIP_DOWNLOAD=true
 
 # Add a work directory
@@ -11,7 +11,7 @@ WORKDIR /app
 COPY package*.json ./
 
 # Install dependencies
-RUN npm ci
+RUN npm install
 
 # Copy source files
 COPY . .
@@ -21,6 +21,10 @@ RUN npm run build
 
 # Production stage
 FROM node:20-alpine
+
+# switch to production mode
+ENV NODE_ENV=production
+ENV PUPPETEER_SKIP_DOWNLOAD=true
 
 WORKDIR /app
 
