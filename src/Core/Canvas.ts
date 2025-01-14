@@ -92,4 +92,11 @@ export class Canvas {
 
         this.ctx.drawImage(image, x, y, width, height);
     }
+
+    /**
+     * Get the canvas context for direct manipulation
+     */
+    getContext(): CanvasRenderingContext2D {
+        return this.ctx;
+    }
 }

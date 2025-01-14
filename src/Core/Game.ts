@@ -2,7 +2,7 @@
  * The main game class. This initializes the game as well as runs the game/render loop and initial handling of input.
  */
 
-import { GAME_CANVAS, GAME_WIDTH, GAME_HEIGHT, IMAGES } from "../Constants";
+import { GAME_CANVAS, GAME_WIDTH, GAME_HEIGHT, IMAGES, KEYS } from "../Constants";
 import { Canvas } from "./Canvas";
 import { ImageManager } from "./ImageManager";
 import { Position, Rect } from "./Utils";
@@ -25,6 +25,16 @@ export class Game {
      * Current game time
      */
     private gameTime: number = Date.now();
+
+    /**
+     * Whether the game is currently paused
+     */
+    private isPaused: boolean = false;
+
+    /**
+     * Animation frame ID for canceling
+     */
+    private animationFrameId?: number;
 
     private imageManager!: ImageManager;
 
@@ -56,11 +66,46 @@ export class Game {
         this.imageManager = new ImageManager();
         this.obstacleManager = new ObstacleManager(this.imageManager, this.canvas);
 
+        this.createEntities();
+    }
+
+    /**
+     * create Entities in the game at their starting positions
+     */
+    private createEntities() {
         this.skier = new Skier(0, 0, this.imageManager, this.obstacleManager, this.canvas);
         this.rhino = new Rhino(-500, -20000, this.imageManager, this.canvas);
 
         this.calculateGameWindow();
         this.obstacleManager.placeInitialObstacles();
+    }
+
+    /**
+     * reset the game state
+     */
+    private resetGame() {
+        // clear all obstacles
+        this.obstacleManager = new ObstacleManager(this.imageManager, this.canvas);
+
+        // reset entities to starting positions
+        this.createEntities();
+
+        // Reset game time
+        this.gameTime = Date.now();
+
+        // Unpause if paused
+        this.isPaused = false;
+    }
+
+    /**
+     * Toggle the pause state
+     */
+    private togglePause() {
+        this.isPaused = !this.isPaused;
+        if (!this.isPaused) {
+            // Resume the game loop
+            this.run();
+        }
     }
 
     /**
@@ -82,12 +127,19 @@ export class Game {
      * The main game loop. Clear the screen, update the game objects and then draw them.
      */
     run() {
+        // clear the canvas
         this.canvas.clearCanvas();
 
-        this.updateGameWindow();
+        // Only update game state if not paused
+        if (!this.isPaused) {
+            this.updateGameWindow();
+        }
+
+        // Always draw the game window (and pause overlay if paused)
         this.drawGameWindow();
 
-        requestAnimationFrame(this.run.bind(this));
+        // request the next frame
+        this.animationFrameId = requestAnimationFrame(this.run.bind(this));
     }
 
     /**
@@ -101,7 +153,7 @@ export class Game {
 
         this.obstacleManager.placeNewObstacle(this.gameWindow, previousGameWindow);
 
-        this.skier.update(this.gameTime); // added game time -- used for animation
+        this.skier.update(this.gameTime);
         this.rhino.update(this.gameTime, this.skier);
     }
 
@@ -116,6 +168,40 @@ export class Game {
         this.skier.draw();
         this.rhino.draw();
         this.obstacleManager.drawObstacles(this.gameTime);
+
+        // Draw pause indicator if paused
+        if (this.isPaused) {
+            this.drawPauseIndicator();
+        }
+    }
+
+    /**
+     * Draw the pause indicator
+     */
+    private drawPauseIndicator() {
+        const ctx = this.canvas.getContext();
+        ctx.save();
+
+        // Reset any existing transforms/offsets
+        ctx.setTransform(1, 0, 0, 1, 0, 0);
+
+        // Draw semi-transparent overlay
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
+        ctx.fillRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
+
+        // Draw "PAUSED" text
+        ctx.fillStyle = 'white';
+        ctx.font = 'bold 48px Arial';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText('PAUSED', GAME_WIDTH / 2, GAME_HEIGHT / 2);
+
+        // Draw instructions
+        ctx.font = 'bold 24px Arial';
+        ctx.fillText('Press P to resume', GAME_WIDTH / 2, GAME_HEIGHT / 2 + 50);
+        ctx.fillText('Press R to restart', GAME_WIDTH / 2, GAME_HEIGHT / 2 + 90);
+
+        ctx.restore();
     }
 
     /**
@@ -134,7 +220,20 @@ export class Game {
      * Handle keypresses and delegate to any game objects that might have key handling of their own.
      */
     handleKeyDown(event: KeyboardEvent) {
-        let handled: boolean = this.skier.handleInput(event.key);
+        let handled: boolean = false;
+
+        switch (event.key) {
+            case KEYS.PAUSE:
+                this.togglePause();
+                handled = true;
+                break;
+            case KEYS.RESET:
+                this.resetGame();
+                handled = true;
+                break;
+            default:
+                handled = this.skier.handleInput(event.key);
+        }
 
         if (handled) {
             event.preventDefault();

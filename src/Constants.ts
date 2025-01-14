@@ -13,6 +13,8 @@ export enum KEYS {
     UP = "ArrowUp",
     DOWN = "ArrowDown",
     JUMP = " ", // unsure why this works but "Space" doesn't
+    PAUSE = "p",
+    RESET = "r",
 }
 
 export enum IMAGE_NAMES {
