@@ -178,12 +178,12 @@ export class Game {
         this.rhino.draw();
         this.obstacleManager.drawObstacles(this.gameTime);
 
-        // Reset transform for UI elements
+        // Draw UI elements
         const ctx = this.canvas.getContext();
         ctx.save();
-        ctx.setTransform(1, 0, 0, 1, 0, 0);
+        ctx.setTransform(1, 0, 0, 1, 0, 0);  // Reset to identity matrix
+        ctx.scale(window.devicePixelRatio, window.devicePixelRatio);  // Scale once for UI
 
-        // Draw UI elements
         if (this.isPaused) {
             this.drawPauseIndicator();
         } else {
@@ -288,8 +288,13 @@ export class Game {
             this.canvas.height = getGameHeight();
             this.canvas.setupCanvas();
 
-            // Recalculate game window with new dimensions
+            // calculate game window with new dimensions
             this.calculateGameWindow();
+
+            // force a redraw to show the pause screen if paused
+            if (this.isPaused) {
+                this.drawGameWindow();
+            }
         });
     }
 }
