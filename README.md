@@ -2,7 +2,7 @@
 
 ![demo](./demo.gif)
 
-<!-- ## Live Demo here: https://ceros-ski.herokuapp.com/ -->
+## [Live Demo here](https://andrewdw-ski-app-tq98u.ondigitalocean.app/)
 
 ## Running the Application
 
