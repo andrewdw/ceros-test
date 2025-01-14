@@ -3,12 +3,13 @@
  * obstacles, places new obstacles as the skier moves throughout the world and displays them all to the screen.
  */
 
-import { GAME_WIDTH, GAME_HEIGHT, IMAGE_NAMES } from "../../Constants";
+import { GAME_WIDTH, GAME_HEIGHT } from "../../Constants";
 import { Canvas } from "../../Core/Canvas";
 import { ImageManager } from "../../Core/ImageManager";
 import { Position, randomInt, Rect } from "../../Core/Utils";
 import { Obstacle } from "./Obstacle";
 import { StaticObstacle } from "./StaticObstacle";
+import { OBSTACLE_REGISTRY, OBSTACLE_TYPES } from "./ObstacleRegistry";
 
 /**
  * Ensures that obstacles aren't too close together
@@ -39,11 +40,11 @@ const JUMP_RAMP_CHANCE: number = 10;
 /**
  * The standard obstacle types that can be randomly placed
  */
-const STANDARD_OBSTACLE_TYPES = [
-    IMAGE_NAMES.TREE,
-    IMAGE_NAMES.TREE_CLUSTER,
-    IMAGE_NAMES.ROCK1,
-    IMAGE_NAMES.ROCK2,
+const STANDARD_OBSTACLE_NAMES: OBSTACLE_TYPES[] = [
+    OBSTACLE_TYPES.TREE,
+    OBSTACLE_TYPES.TREE_CLUSTER,
+    OBSTACLE_TYPES.ROCK1,
+    OBSTACLE_TYPES.ROCK2,
 ];
 
 export class ObstacleManager {
@@ -84,17 +85,17 @@ export class ObstacleManager {
     }
 
     /**
-     * Get a random obstacle type, with a chance to spawn a jump ramp
+     * Get a random obstacle name, with a chance to spawn a jump ramp
      */
-    getRandomObstacleType(): IMAGE_NAMES {
+    getRandomObstacleName(): OBSTACLE_TYPES {
         // chance to spawn a jump ramp based on the chance variable
         const rampChance = randomInt(1, JUMP_RAMP_CHANCE);
         if (rampChance === JUMP_RAMP_CHANCE) {
-            return IMAGE_NAMES.JUMP_RAMP;
+            return OBSTACLE_TYPES.JUMP_RAMP;
         }
         // otherwise, spawn a random obstacle
-        const typeIdx = randomInt(0, STANDARD_OBSTACLE_TYPES.length - 1);
-        return STANDARD_OBSTACLE_TYPES[typeIdx];
+        const typeIdx = randomInt(0, STANDARD_OBSTACLE_NAMES.length - 1);
+        return STANDARD_OBSTACLE_NAMES[typeIdx];
     }
 
     /**
@@ -182,8 +183,11 @@ export class ObstacleManager {
             position = this.calculateOpenPosition(placementArea);
         } while (!position);
 
-        const obstacleType = this.getRandomObstacleType();
-        const newObstacle = new StaticObstacle(obstacleType, position.x, position.y, this.imageManager, this.canvas);
+        // Get a random obstacle name
+        const obstacleName = this.getRandomObstacleName();
+
+        // Create the obstacle
+        const newObstacle = new StaticObstacle(obstacleName, position.x, position.y, this.imageManager, this.canvas);
 
         this.obstacles.push(newObstacle);
     }

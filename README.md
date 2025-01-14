@@ -2,7 +2,7 @@
 
 ## Andrew's Modifications
 
-- Game was running really fast in Chrome (noted in Bugs) so modified `STARTING_SPEED` and moved rhino further away for a more pleasurable game experience
+- Game was running really fast in Chrome (noted in Bugs below) so modified `STARTING_SPEED` and moved rhino further away for a more pleasurable game experience
 
 - Noticed the jump and skier flipping assets where in the image directory so added the image paths as constants
 
