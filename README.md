@@ -16,6 +16,10 @@
 
 - Standardized the animation config in the `ObstacleRegistry` and added function to generate the config for each dog
 
+- Added ability to pause (with "p") the game by modifying the `Game` class to not update gameWindow if isPaused. 
+
+- Also added listener for reset commands "r" and reset the obstacles, entities and game time
+
 ## Noted Bugs
 
 - The game appears to run faster on Chrome than Safari

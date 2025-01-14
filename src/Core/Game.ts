@@ -169,9 +169,11 @@ export class Game {
         this.rhino.draw();
         this.obstacleManager.drawObstacles(this.gameTime);
 
-        // Draw pause indicator if paused
+        // Draw pause indicator if paused, otherwise draw instructions
         if (this.isPaused) {
             this.drawPauseIndicator();
+        } else {
+            this.drawInstructions();
         }
     }
 
@@ -198,8 +200,40 @@ export class Game {
 
         // Draw instructions
         ctx.font = 'bold 24px Arial';
-        ctx.fillText('Press P to resume', GAME_WIDTH / 2, GAME_HEIGHT / 2 + 50);
-        ctx.fillText('Press R to restart', GAME_WIDTH / 2, GAME_HEIGHT / 2 + 90);
+        ctx.fillText('Press "p" to resume', GAME_WIDTH / 2, GAME_HEIGHT / 2 + 50);
+        ctx.fillText('Press "r" to restart', GAME_WIDTH / 2, GAME_HEIGHT / 2 + 90);
+
+        ctx.restore();
+    }
+
+    /**
+     * Draw the game instructions in the bottom left corner
+     */
+    private drawInstructions() {
+        const ctx = this.canvas.getContext();
+        ctx.save();
+
+        // Reset any existing transforms/offsets
+        ctx.setTransform(1, 0, 0, 1, 0, 0);
+
+        // Setup text style
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
+        ctx.font = 'bold 16px Arial';
+        ctx.textAlign = 'left';
+        ctx.textBaseline = 'bottom';
+
+        // Draw instruction box
+        const padding = 10;
+        const lineHeight = 20;
+        const x = padding;
+        let y = GAME_HEIGHT - padding;
+
+        // Draw instructions from bottom to top
+        ctx.fillText('"r" to restart', x, y);
+        y -= lineHeight;
+        ctx.fillText('"p"  to pause', x, y);
+        y -= lineHeight;
+        ctx.fillText('SPACE to jump', x, y);
 
         ctx.restore();
     }
