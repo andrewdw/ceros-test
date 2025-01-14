@@ -20,6 +20,8 @@
 
 - Also added listener for reset commands "r" and reset the obstacles, entities and game time
 
+- Encountered a bug (or feature) that pressing pause and unpause speeds up the game significantly. Prevented this by canceling the previous animation frames on each pause
+
 ## Noted Bugs
 
 - The game appears to run faster on Chrome than Safari

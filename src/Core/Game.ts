@@ -102,9 +102,20 @@ export class Game {
      */
     private togglePause() {
         this.isPaused = !this.isPaused;
-        if (!this.isPaused) {
-            // Resume the game loop
-            this.run();
+
+        if (this.isPaused && this.animationFrameId) {
+            // cancel the animation frame when pausing
+            // without this, the game will continue to run in the background and get faster and faster
+            cancelAnimationFrame(this.animationFrameId);
+            this.animationFrameId = undefined;
+
+            // Do one final draw to show the pause screen
+            this.drawGameWindow();
+        } else if (!this.isPaused) {
+            // only start a new game loop if we're unpausing and don't have one running
+            if (!this.animationFrameId) {
+                this.run();
+            }
         }
     }
 
@@ -127,9 +138,6 @@ export class Game {
      * The main game loop. Clear the screen, update the game objects and then draw them.
      */
     run() {
-        // clear the canvas
-        this.canvas.clearCanvas();
-
         // Only update game state if not paused
         if (!this.isPaused) {
             this.updateGameWindow();
@@ -163,18 +171,25 @@ export class Game {
     drawGameWindow() {
         this.canvas.clearCanvas();
 
+        // Draw game world
         this.canvas.setDrawOffset(this.gameWindow.left, this.gameWindow.top);
-
         this.skier.draw();
         this.rhino.draw();
         this.obstacleManager.drawObstacles(this.gameTime);
 
-        // Draw pause indicator if paused, otherwise draw instructions
+        // Reset transform for UI elements
+        const ctx = this.canvas.getContext();
+        ctx.save();
+        ctx.setTransform(1, 0, 0, 1, 0, 0);
+
+        // Draw UI elements
         if (this.isPaused) {
             this.drawPauseIndicator();
         } else {
             this.drawInstructions();
         }
+
+        ctx.restore();
     }
 
     /**
@@ -182,10 +197,6 @@ export class Game {
      */
     private drawPauseIndicator() {
         const ctx = this.canvas.getContext();
-        ctx.save();
-
-        // Reset any existing transforms/offsets
-        ctx.setTransform(1, 0, 0, 1, 0, 0);
 
         // Draw semi-transparent overlay
         ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
@@ -202,8 +213,6 @@ export class Game {
         ctx.font = 'bold 24px Arial';
         ctx.fillText('Press "p" to resume', GAME_WIDTH / 2, GAME_HEIGHT / 2 + 50);
         ctx.fillText('Press "r" to restart', GAME_WIDTH / 2, GAME_HEIGHT / 2 + 90);
-
-        ctx.restore();
     }
 
     /**
@@ -211,10 +220,6 @@ export class Game {
      */
     private drawInstructions() {
         const ctx = this.canvas.getContext();
-        ctx.save();
-
-        // Reset any existing transforms/offsets
-        ctx.setTransform(1, 0, 0, 1, 0, 0);
 
         // Setup text style
         ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
@@ -231,11 +236,9 @@ export class Game {
         // Draw instructions from bottom to top
         ctx.fillText('"r" to restart', x, y);
         y -= lineHeight;
-        ctx.fillText('"p"  to pause', x, y);
+        ctx.fillText('"p" to pause', x, y);
         y -= lineHeight;
         ctx.fillText('SPACE to jump', x, y);
-
-        ctx.restore();
     }
 
     /**
