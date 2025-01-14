@@ -11,7 +11,7 @@ WORKDIR /app
 COPY package*.json ./
 
 # Install dependencies
-RUN npm install
+RUN npm ci
 
 # Copy source files
 COPY . .
@@ -37,7 +37,7 @@ COPY --from=builder /app/dist ./dist
 COPY server.js ./
 
 # Expose the port
-EXPOSE 8080/tcp
+EXPOSE 8080
 
 # Start the production server
 CMD ["node", "server.js"]

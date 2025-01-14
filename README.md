@@ -15,10 +15,14 @@
 
 `make dev` or `docker compose up` will run the application
 
+The application will be available at `http://localhost:8080`
+
 ### Running locally without Docker
 
 1. `npm install`
 2. `npm run dev`
+
+The application will be available at `http://localhost:8080`
 
 ### Running unit tests
 

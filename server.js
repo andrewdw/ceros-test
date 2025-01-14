@@ -11,7 +11,7 @@ app.get("*", (req, res) => {
     res.sendFile(path.join(__dirname, "dist", "index.html"));
 });
 
-// listen on all interfaces
-app.listen(port, "0.0.0.0", () => {
-    console.log(`Server is running on http://0.0.0.0:${port}`);
+// listen without explicitly specifying host, as per DO best practices
+app.listen(port, () => {
+    console.log(`Server is running on port ${port}`);
 });
