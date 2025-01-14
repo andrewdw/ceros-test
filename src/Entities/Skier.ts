@@ -411,12 +411,33 @@ export class Skier extends Entity {
     }
 
     /**
-     * Turn the skier to face straight down. If they're crashed don't do anything to require them to move left or right
-     * to escape an obstacle before skiing down again.
+     * Turn the skier to face straight down. If they're crashed, check if there's still an
+     * obstacle in the way before allowing the turn.
      */
     turnDown() {
         if (this.isCrashed()) {
-            return;
+            // get current bounds
+            const currentBounds = this.getBounds();
+            if (!currentBounds) {
+                return;
+            }
+
+            // check if there's still an obstacle at current position
+            const hasObstacle = this.obstacleManager.getObstacles().some((obstacle: Obstacle): boolean => {
+                const obstacleBounds = obstacle.getBounds();
+                if (!obstacleBounds) {
+                    return false;
+                }
+                return intersectTwoRects(currentBounds, obstacleBounds);
+            });
+
+            // only prevent turning down if there's still an obstacle
+            if (hasObstacle) {
+                return;
+            }
+
+            // No obstacle, so recover and turn down
+            this.recoverFromCrash(DIRECTION_DOWN);
         }
 
         this.setDirection(DIRECTION_DOWN);

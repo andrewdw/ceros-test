@@ -1,37 +1,60 @@
 # Ceros Ski Code Challenge - TypeScript Edition
 
+## Running the Application
+
+### Requirements
+
+-   Node.js 18+
+-   Docker 20+ (optional)
+
+### Running locally with Docker (recommended)
+
+`make dev` or `docker compose up` will run the application in production mode
+
+### Running locally without Docker in dev mode
+
+1. `npm install`
+2. `npm run dev`
+
+### Running unit tests
+
+`npm run test` will run the unit tests in the `src/Entities/*/__test__` directory
+
 ## Andrew's Modifications
 
-- Game was running really fast in Chrome (noted in Bugs below) so modified `STARTING_SPEED` and moved rhino further away for a more pleasurable game experience
+-   Game was running really fast in Chrome (noted in Bugs below) so modified `STARTING_SPEED` and moved rhino further away for a more pleasurable game experience
 
-- Noticed the jump and skier flipping assets where in the image directory so added the image paths as constants
+-   Noticed the jump and skier flipping assets where in the image directory so added the image paths as constants
 
-- Because animation functionality was contained in rhino but very similar to the methods the skier needed I moved the logic to the `Entity` class
+-   Because animation functionality was contained in rhino but very similar to the methods the skier needed I moved the logic to the `Entity` class
 
-- In an effort to extend functionality, created a base `Obstacle` class and extended it with `StaticObstacle`. `StaticObstacle` currently encompases every existing obstacle that doesn't move or animate
+-   In an effort to extend functionality, created a base `Obstacle` class and extended it with `StaticObstacle`. `StaticObstacle` currently encompases every existing obstacle that doesn't move or animate
 
-- Created `ObstacleRegistry` type to better manage obstacles and assets
+-   Created `ObstacleRegistry` type to better manage obstacles and assets
 
-- Generated a dog sprite in Dall-E and (poorly) modified it to look like it was walking. Added the assets in the game and created a `MovingObstacle` class to demonstrate the extenability of the codebase
+-   Generated a dog sprite in Dall-E and (poorly) modified it to look like it was walking. Added the assets in the game and created a `MovingObstacle` class to demonstrate the extenability of the codebase
 
-- Standardized the animation config in the `ObstacleRegistry` and added function to generate the config for each dog
+-   Standardized the animation config in the `ObstacleRegistry` and added function to generate the config for each dog
 
-- Added ability to pause (with "p") the game by modifying the `Game` class to not update gameWindow if isPaused. 
+-   Added ability to pause (with "p") the game by modifying the `Game` class to not update gameWindow if isPaused.
 
-- Also added listener for reset commands "r" and reset the obstacles, entities and game time
+-   Also added listener for reset commands "r" and reset the obstacles, entities and game time
 
-- Encountered a bug (or feature) that pressing pause and unpause speeds up the game significantly. Prevented this by canceling the previous animation frames on each pause
+-   Encountered a bug (or feature) that pressing pause and unpause speeds up the game significantly. Prevented this by canceling the previous animation frames on each pause
 
-- Fixed the canvas not resizing with the window by adding a setupResizeHandling method to `Game` class with a window listener that sets teh canvas width & height on fire
+-   Fixed the canvas not resizing with the window by adding a setupResizeHandling method to `Game` class with a window listener that sets teh canvas width & height on fire
 
-- Added unit tests for Obstacles in `src/Entities/Obstacles/__test__` that test the basic generation of new obsticals, their movement and expected thrown errors 
+-   Added unit tests for Obstacles in `src/Entities/Obstacles/__test__` that test the basic generation of new obsticals, their movement and expected thrown errors
+
+-   Dockerized the application for running in prod
+
+-   Lastly modified the `Skier` class to check if there's no longer an obstacle in the way before turning down (i.e. they hit a dog and it's gone, downarrow will move them again).
 
 ## Noted Bugs
 
-- The game appears to run faster on Chrome vs Safari
+-   The game appears to run faster on Chrome vs Safari
 
-- <s>Canvas does not resize with window until page is reloaded</s> Fixed (noted above)
-
+-   <s>Canvas does not resize with window until page is reloaded</s> Fixed (noted above)
 
 ## Original instructions
 
@@ -59,9 +82,9 @@ npm run dev
 **Time Limit**
 
 Solutions should be submitted within a week of receiving the challenge. We expect the challenge to take around two
-hours of your time, but you may spend as long as you need to create a robust solution. We understand that everyone has 
-varying levels of free time, and we'd rather you take the time and produce a solution up to your ability than rush and 
-turn in a suboptimal challenge. If you require more time, please reach out to us. Look through the requirements below 
+hours of your time, but you may spend as long as you need to create a robust solution. We understand that everyone has
+varying levels of free time, and we'd rather you take the time and produce a solution up to your ability than rush and
+turn in a suboptimal challenge. If you require more time, please reach out to us. Look through the requirements below
 and let us know when you will have something for us to look at. If anything is unclear, don't hesitate to reach out.
 
 **Requirements**
