@@ -28,7 +28,7 @@ The application will be available at `http://localhost:8080`
 
 `npm run test` will run the unit tests in the `src/Entities/*/__test__` directory
 
-## Andrew's Modifications
+## Modifications
 
 -   Game was running really fast in Chrome (noted in Bugs below) so modified `STARTING_SPEED` and moved rhino further away for a more pleasurable game experience
 
