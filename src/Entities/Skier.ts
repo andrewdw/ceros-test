@@ -9,7 +9,7 @@ import { Canvas } from "../Core/Canvas";
 import { ImageManager } from "../Core/ImageManager";
 import { intersectTwoRects, Rect } from "../Core/Utils";
 import { ObstacleManager } from "./Obstacles/ObstacleManager";
-import { Obstacle, OBSTACLE_TYPES_DIR } from "./Obstacles/Obstacle";
+import { Obstacle } from "./Obstacles/Obstacle";
 import { Animation } from "../Core/Animation";
 
 /**
@@ -461,11 +461,11 @@ export class Skier extends Entity {
         });
 
         if (objectContact) {
-            if (objectContact.imageName === OBSTACLE_TYPES_DIR.jumpRamp) {
+            if (objectContact.imageName === IMAGE_NAMES.JUMP_RAMP) {
                 this.jump();
             } else if (this.isJumping() &&
-                objectContact.imageName !== OBSTACLE_TYPES_DIR.tree &&
-                objectContact.imageName !== OBSTACLE_TYPES_DIR.treeCluster) {
+                objectContact.imageName !== IMAGE_NAMES.TREE &&
+                objectContact.imageName !== IMAGE_NAMES.TREE_CLUSTER) {
                 // When jumping, we can pass over rocks but not trees
                 return;
             } else {

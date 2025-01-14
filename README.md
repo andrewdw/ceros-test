@@ -1,5 +1,24 @@
 # Ceros Ski Code Challenge - TypeScript Edition
 
+## Andrew's Modifications
+
+- Game was running really fast in Chrome (noted in Bugs) so modified `STARTING_SPEED` and moved rhino further away for a more pleasurable game experience
+
+- Noticed the jump and skier flipping assets where in the image directory so added the image paths as constants
+
+- Because animation functionality was contained in rhino but very similar to the methods the skier needed I moved the logic to the `Entity` class
+
+- In an effort to extend functionality, created a base `Obstacle` class and extended it with `StaticObstacle`. `StaticObstacle` currently encompases every existing obstacle that doesn't move or animate
+
+## Noted Bugs
+
+- The game appears to run faster on Chrome than Safari
+
+- Canvas does not resize with window until page is reloaded
+
+
+## Original instructions
+
 Welcome to the Ceros Ski Code Challenge!
 
 For this challenge, we have included some base code for Ceros Ski, our version of the classic Windows game SkiFree. If

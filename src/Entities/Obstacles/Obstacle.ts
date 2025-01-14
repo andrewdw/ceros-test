@@ -1,50 +1,69 @@
 /**
- * An obstacle that appears on the mountain. Randomly created as one of the types defined in the OBSTACLE_TYPES array.
+ * Base class for all obstacles in the game. Different types of obstacles can extend this
+ * to implement their own behavior and animations.
  */
 
 import { IMAGE_NAMES } from "../../Constants";
 import { Canvas } from "../../Core/Canvas";
 import { ImageManager } from "../../Core/ImageManager";
-import { randomInt } from "../../Core/Utils";
 import { Entity } from "../Entity";
 
 /**
- * The different types of obstacles that can be placed in the game.
+ * The different categories of obstacles
  */
-export const OBSTACLE_TYPES: IMAGE_NAMES[] = [
-    IMAGE_NAMES.TREE,
-    IMAGE_NAMES.TREE_CLUSTER,
-    IMAGE_NAMES.ROCK1,
-    IMAGE_NAMES.ROCK2,
-    IMAGE_NAMES.JUMP_RAMP,
-];
+export enum OBSTACLE_CATEGORY {
+    STATIC = "static",    // Non-moving, non-animated obstacles (rocks)
+    ANIMATED = "animated", // Animated but stationary obstacles (flags, lifts)
+    MOVING = "moving",    // Moving obstacles (other skiers, snowmobiles)
+    INTERACTIVE = "interactive" // Obstacles that can be interacted with (jumps, gates)
+}
 
 /**
- * export object as helper for selecting objects directly
- **/
-export const OBSTACLE_TYPES_DIR = OBSTACLE_TYPES.reduce((acc, type: IMAGE_NAMES) => {
-    acc[type] = type;
-    return acc;
-}, {} as Record<IMAGE_NAMES, IMAGE_NAMES>);
-
-export class Obstacle extends Entity {
+ * Base class for all obstacles
+ */
+export abstract class Obstacle extends Entity {
     /**
      * The name of the current image being displayed for the obstacle.
      */
     imageName: IMAGE_NAMES;
 
     /**
-     * Initialize an obstacle of the given type and position it on the game screen
+     * The category this obstacle belongs to
      */
-    constructor(x: number, y: number, imageManager: ImageManager, canvas: Canvas) {
-        super(x, y, imageManager, canvas);
+    protected category: OBSTACLE_CATEGORY;
 
-        const typeIdx = randomInt(0, OBSTACLE_TYPES.length - 1);
-        this.imageName = OBSTACLE_TYPES[typeIdx];
+    /**
+     * Whether the skier can jump over this obstacle
+     */
+    protected canJumpOver: boolean;
+
+    /**
+     * Whether this obstacle can be crashed into
+     */
+    protected canCrashInto: boolean;
+
+    /**
+     * Initialize an obstacle
+     */
+    constructor(
+        type: IMAGE_NAMES,
+        category: OBSTACLE_CATEGORY,
+        canJumpOver: boolean,
+        canCrashInto: boolean,
+        x: number,
+        y: number,
+        imageManager: ImageManager,
+        canvas: Canvas
+    ) {
+        super(x, y, imageManager, canvas);
+        this.imageName = type;
+        this.category = category;
+        this.canJumpOver = canJumpOver;
+        this.canCrashInto = canCrashInto;
     }
 
     /**
-     * Get the current state of the obstacle. Obstacles don't have states, so return an empty string.
+     * Get the current state of the obstacle.
      */
     protected getState(): string {
         return "";
@@ -53,5 +72,5 @@ export class Obstacle extends Entity {
     /**
      * Obstacles can't be destroyed
      */
-    die() {}
+    die(): void {}
 }

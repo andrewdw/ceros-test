@@ -7,7 +7,8 @@ import { GAME_WIDTH, GAME_HEIGHT, IMAGE_NAMES } from "../../Constants";
 import { Canvas } from "../../Core/Canvas";
 import { ImageManager } from "../../Core/ImageManager";
 import { Position, randomInt, Rect } from "../../Core/Utils";
-import { Obstacle, OBSTACLE_TYPES, OBSTACLE_TYPES_DIR } from "./Obstacle";
+import { Obstacle } from "./Obstacle";
+import { StaticObstacle } from "./StaticObstacle";
 
 /**
  * Ensures that obstacles aren't too close together
@@ -34,6 +35,16 @@ const NEW_OBSTACLE_CHANCE: number = 8;
  * The chance that a new obstacle will be a jump ramp. A lower number increases the chances.
  */
 const JUMP_RAMP_CHANCE: number = 10;
+
+/**
+ * The standard obstacle types that can be randomly placed
+ */
+const STANDARD_OBSTACLE_TYPES = [
+    IMAGE_NAMES.TREE,
+    IMAGE_NAMES.TREE_CLUSTER,
+    IMAGE_NAMES.ROCK1,
+    IMAGE_NAMES.ROCK2,
+];
 
 export class ObstacleManager {
     /**
@@ -79,11 +90,11 @@ export class ObstacleManager {
         // chance to spawn a jump ramp based on the chance variable
         const rampChance = randomInt(1, JUMP_RAMP_CHANCE);
         if (rampChance === JUMP_RAMP_CHANCE) {
-            return OBSTACLE_TYPES_DIR.jumpRamp;
+            return IMAGE_NAMES.JUMP_RAMP;
         }
         // otherwise, spawn a random obstacle
-        const typeIdx = randomInt(0, OBSTACLE_TYPES.length - 1);
-        return OBSTACLE_TYPES[typeIdx];
+        const typeIdx = randomInt(0, STANDARD_OBSTACLE_TYPES.length - 1);
+        return STANDARD_OBSTACLE_TYPES[typeIdx];
     }
 
     /**
@@ -171,7 +182,8 @@ export class ObstacleManager {
             position = this.calculateOpenPosition(placementArea);
         } while (!position);
 
-        const newObstacle = new Obstacle(position.x, position.y, this.imageManager, this.canvas);
+        const obstacleType = this.getRandomObstacleType();
+        const newObstacle = new StaticObstacle(obstacleType, position.x, position.y, this.imageManager, this.canvas);
 
         this.obstacles.push(newObstacle);
     }
