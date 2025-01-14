@@ -3,7 +3,7 @@
  * obstacles, places new obstacles as the skier moves throughout the world and displays them all to the screen.
  */
 
-import { GAME_WIDTH, GAME_HEIGHT } from "../../Constants";
+import { getGameWidth, getGameHeight } from "../../Constants";
 import { Canvas } from "../../Core/Canvas";
 import { ImageManager } from "../../Core/ImageManager";
 import { Position, randomInt, Rect } from "../../Core/Utils";
@@ -120,10 +120,10 @@ export class ObstacleManager {
      */
     placeInitialObstacles() {
         const numberObstacles = Math.ceil(
-            (GAME_WIDTH / STARTING_OBSTACLE_REDUCER) * (GAME_HEIGHT / STARTING_OBSTACLE_REDUCER)
+            (getGameWidth() / STARTING_OBSTACLE_REDUCER) * (getGameHeight() / STARTING_OBSTACLE_REDUCER)
         );
 
-        const placementArea = new Rect(-GAME_WIDTH / 2, STARTING_OBSTACLE_GAP, GAME_WIDTH / 2, GAME_HEIGHT / 2);
+        const placementArea = new Rect(-getGameWidth() / 2, STARTING_OBSTACLE_GAP, getGameWidth() / 2, getGameHeight() / 2);
 
         for (let i = 0; i < numberObstacles; i++) {
             this.placeRandomObstacle(placementArea);

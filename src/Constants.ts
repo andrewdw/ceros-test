@@ -1,8 +1,8 @@
 import { iImage } from "./Interfaces/iImage";
 
 export const GAME_CANVAS = "skiCanvas";
-export const GAME_WIDTH = window.innerWidth;
-export const GAME_HEIGHT = window.innerHeight;
+export const getGameWidth = () => window.innerWidth;
+export const getGameHeight = () => window.innerHeight;
 
 /**
  * Browser event codes

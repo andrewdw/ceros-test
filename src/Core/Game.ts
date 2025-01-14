@@ -2,7 +2,7 @@
  * The main game class. This initializes the game as well as runs the game/render loop and initial handling of input.
  */
 
-import { GAME_CANVAS, GAME_WIDTH, GAME_HEIGHT, IMAGES, KEYS } from "../Constants";
+import { GAME_CANVAS, getGameWidth, getGameHeight, IMAGES, KEYS } from "../Constants";
 import { Canvas } from "./Canvas";
 import { ImageManager } from "./ImageManager";
 import { Position, Rect } from "./Utils";
@@ -56,13 +56,14 @@ export class Game {
     constructor() {
         this.init();
         this.setupInputHandling();
+        this.setupResizeHandling();
     }
 
     /**
      * Create all necessary game objects and initialize them as needed.
      */
     init() {
-        this.canvas = new Canvas(GAME_CANVAS, GAME_WIDTH, GAME_HEIGHT);
+        this.canvas = new Canvas(GAME_CANVAS, getGameWidth(), getGameHeight());
         this.imageManager = new ImageManager();
         this.obstacleManager = new ObstacleManager(this.imageManager, this.canvas);
 
@@ -200,19 +201,19 @@ export class Game {
 
         // Draw semi-transparent overlay
         ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
-        ctx.fillRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
+        ctx.fillRect(0, 0, getGameWidth(), getGameHeight());
 
         // Draw "PAUSED" text
         ctx.fillStyle = 'white';
         ctx.font = 'bold 48px Arial';
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
-        ctx.fillText('PAUSED', GAME_WIDTH / 2, GAME_HEIGHT / 2);
+        ctx.fillText('PAUSED', getGameWidth() / 2, getGameHeight() / 2);
 
         // Draw instructions
         ctx.font = 'bold 24px Arial';
-        ctx.fillText('Press "p" to resume', GAME_WIDTH / 2, GAME_HEIGHT / 2 + 50);
-        ctx.fillText('Press "r" to restart', GAME_WIDTH / 2, GAME_HEIGHT / 2 + 90);
+        ctx.fillText('Press "p" to resume', getGameWidth() / 2, getGameHeight() / 2 + 50);
+        ctx.fillText('Press "r" to restart', getGameWidth() / 2, getGameHeight() / 2 + 90);
     }
 
     /**
@@ -231,7 +232,7 @@ export class Game {
         const padding = 10;
         const lineHeight = 20;
         const x = padding;
-        let y = GAME_HEIGHT - padding;
+        let y = getGameHeight() - padding;
 
         // Draw instructions from bottom to top
         ctx.fillText('"r" to restart', x, y);
@@ -247,10 +248,10 @@ export class Game {
      */
     calculateGameWindow() {
         const skierPosition: Position = this.skier.getPosition();
-        const left: number = skierPosition.x - GAME_WIDTH / 2;
-        const top: number = skierPosition.y - GAME_HEIGHT / 2;
+        const left: number = skierPosition.x - getGameWidth() / 2;
+        const top: number = skierPosition.y - getGameHeight() / 2;
 
-        this.gameWindow = new Rect(left, top, left + GAME_WIDTH, top + GAME_HEIGHT);
+        this.gameWindow = new Rect(left, top, left + getGameWidth(), top + getGameHeight());
     }
 
     /**
@@ -275,5 +276,20 @@ export class Game {
         if (handled) {
             event.preventDefault();
         }
+    }
+
+    /**
+     * Setup window resize handling
+     */
+    private setupResizeHandling() {
+        window.addEventListener('resize', () => {
+            // Update canvas size
+            this.canvas.width = getGameWidth();
+            this.canvas.height = getGameHeight();
+            this.canvas.setupCanvas();
+
+            // Recalculate game window with new dimensions
+            this.calculateGameWindow();
+        });
     }
 }

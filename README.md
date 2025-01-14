@@ -22,11 +22,13 @@
 
 - Encountered a bug (or feature) that pressing pause and unpause speeds up the game significantly. Prevented this by canceling the previous animation frames on each pause
 
+- Fixed the canvas not resizing with the window by adding a setupResizeHandling method to `Game` class with a window listener that sets teh canvas width & height on fire
+
 ## Noted Bugs
 
 - The game appears to run faster on Chrome than Safari
 
-- Canvas does not resize with window until page is reloaded
+- <s>Canvas does not resize with window until page is reloaded</s> Fixed (noted above)
 
 
 ## Original instructions
