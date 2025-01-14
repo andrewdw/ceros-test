@@ -96,6 +96,15 @@ export class Game {
 
         // Unpause if paused
         this.isPaused = false;
+
+        // cancel existing animation frame
+        if (this.animationFrameId) {
+            cancelAnimationFrame(this.animationFrameId);
+            this.animationFrameId = undefined;
+        }
+
+        // new game loop
+        this.run();
     }
 
     /**
