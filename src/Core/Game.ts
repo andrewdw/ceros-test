@@ -106,15 +106,16 @@ export class Game {
     }
 
     /**
-     * Draw all entities to the screen, in the correct order. Also setup the canvas draw offset so that we see the
-     * rectangular space denoted by the game window.
+     * Draw all entities to the canvas
      */
     drawGameWindow() {
+        this.canvas.clearCanvas();
+
         this.canvas.setDrawOffset(this.gameWindow.left, this.gameWindow.top);
 
         this.skier.draw();
         this.rhino.draw();
-        this.obstacleManager.drawObstacles();
+        this.obstacleManager.drawObstacles(this.gameTime);
     }
 
     /**

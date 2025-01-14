@@ -42,6 +42,11 @@ export enum IMAGE_NAMES {
     SKIER_JUMP4 = "skierJump4",
     SKIER_JUMP5 = "skierJump5",
     JUMP_RAMP = "jumpRamp",
+    // dog animations
+    DOG_LEFT_1 = "dogLeft1",
+    DOG_LEFT_2 = "dogLeft2",
+    DOG_RIGHT_1 = "dogRight1",
+    DOG_RIGHT_2 = "dogRight2",
 }
 
 export const IMAGES: iImage[] = [
@@ -71,6 +76,11 @@ export const IMAGES: iImage[] = [
     { name: IMAGE_NAMES.SKIER_JUMP4, url: "img/skier_jump_4.png" },
     { name: IMAGE_NAMES.SKIER_JUMP5, url: "img/skier_jump_5.png" },
     { name: IMAGE_NAMES.JUMP_RAMP, url: "img/jump_ramp.png" },
+    // dog animations
+    { name: IMAGE_NAMES.DOG_LEFT_1, url: "img/dog_left_1.png" },
+    { name: IMAGE_NAMES.DOG_LEFT_2, url: "img/dog_left_2.png" },
+    { name: IMAGE_NAMES.DOG_RIGHT_1, url: "img/dog_right_1.png" },
+    { name: IMAGE_NAMES.DOG_RIGHT_2, url: "img/dog_right_2.png" },
 ];
 
 export const ANIMATION_FRAME_SPEED_MS: number = 250;

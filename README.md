@@ -10,6 +10,12 @@
 
 - In an effort to extend functionality, created a base `Obstacle` class and extended it with `StaticObstacle`. `StaticObstacle` currently encompases every existing obstacle that doesn't move or animate
 
+- Created `ObstacleRegistry` type to better manage obstacles and assets
+
+- Generated a dog sprite in Dall-E and (poorly) modified it to look like it was walking. Added the assets in the game and created a `MovingObstacle` class to demonstrate the extenability of the codebase
+
+- Standardized the animation config in the `ObstacleRegistry` and added function to generate the config for each dog
+
 ## Noted Bugs
 
 - The game appears to run faster on Chrome than Safari

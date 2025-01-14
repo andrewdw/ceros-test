@@ -9,6 +9,7 @@ import { ImageManager } from "../../Core/ImageManager";
 import { Position, randomInt, Rect } from "../../Core/Utils";
 import { Obstacle } from "./Obstacle";
 import { StaticObstacle } from "./StaticObstacle";
+import { MovingObstacle } from "./MovingObstacle";
 import { OBSTACLE_REGISTRY, OBSTACLE_TYPES } from "./ObstacleRegistry";
 
 /**
@@ -36,6 +37,11 @@ const NEW_OBSTACLE_CHANCE: number = 8;
  * The chance that a new obstacle will be a jump ramp. A lower number increases the chances.
  */
 const JUMP_RAMP_CHANCE: number = 10;
+
+/**
+ * The chance that a new obstacle will be a dog. A lower number increases the chances.
+ */
+const DOG_CHANCE: number = 15;
 
 /**
  * The standard obstacle types that can be randomly placed
@@ -76,16 +82,19 @@ export class ObstacleManager {
     }
 
     /**
-     * Loop through and draw all obstacles
+     * Loop through and draw all obstacles, updating any that need it
      */
-    drawObstacles() {
+    drawObstacles(gameTime: number) {
         this.obstacles.forEach((obstacle: Obstacle) => {
+            if (obstacle instanceof MovingObstacle) {
+                obstacle.update(gameTime);
+            }
             obstacle.draw();
         });
     }
 
     /**
-     * Get a random obstacle name, with a chance to spawn a jump ramp
+     * Get a random obstacle name, with a chance to spawn special obstacles
      */
     getRandomObstacleName(): OBSTACLE_TYPES {
         // chance to spawn a jump ramp based on the chance variable
@@ -93,6 +102,13 @@ export class ObstacleManager {
         if (rampChance === JUMP_RAMP_CHANCE) {
             return OBSTACLE_TYPES.JUMP_RAMP;
         }
+
+        // chance to spawn a dog
+        const dogChance = randomInt(1, DOG_CHANCE);
+        if (dogChance === DOG_CHANCE) {
+            return OBSTACLE_TYPES.DOG;
+        }
+
         // otherwise, spawn a random obstacle
         const typeIdx = randomInt(0, STANDARD_OBSTACLE_NAMES.length - 1);
         return STANDARD_OBSTACLE_NAMES[typeIdx];
@@ -185,9 +201,21 @@ export class ObstacleManager {
 
         // Get a random obstacle name
         const obstacleName = this.getRandomObstacleName();
+        const config = OBSTACLE_REGISTRY[obstacleName];
 
-        // Create the obstacle
-        const newObstacle = new StaticObstacle(obstacleName, position.x, position.y, this.imageManager, this.canvas);
+        // Create the obstacle based on its type
+        let newObstacle: Obstacle;
+        if (config.isMoving && config.movingConfig) {
+            newObstacle = new MovingObstacle(
+                config.movingConfig(),
+                position.x,
+                position.y,
+                this.imageManager,
+                this.canvas
+            );
+        } else {
+            newObstacle = new StaticObstacle(obstacleName, position.x, position.y, this.imageManager, this.canvas);
+        }
 
         this.obstacles.push(newObstacle);
     }
