@@ -24,9 +24,11 @@
 
 - Fixed the canvas not resizing with the window by adding a setupResizeHandling method to `Game` class with a window listener that sets teh canvas width & height on fire
 
+- Added unit tests for Obstacles in `src/Entities/Obstacles/__test__` that test the basic generation of new obsticals, their movement and expected thrown errors 
+
 ## Noted Bugs
 
-- The game appears to run faster on Chrome than Safari
+- The game appears to run faster on Chrome vs Safari
 
 - <s>Canvas does not resize with window until page is reloaded</s> Fixed (noted above)
 
